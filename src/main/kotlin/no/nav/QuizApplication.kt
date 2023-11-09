@@ -43,6 +43,9 @@ class QuizApplication(private val teamName: String, database: Database? = null):
     // [Question] category: is-a-prime, question: Er det et primtall? 47, id: df7d58fb-1ca0-49fc-9dcb-ca17ea8b10ba
     private fun handleRegisterTeam(question: Question) {
 
+        if(question.question.contains("svaret må rundes til int"))
+            answer(question.category, questionId = question.id(), answer = regnUt(question.question).toString())
+
         if (question.id() == "0df7552c-ab8e-42cc-bd11-a6670116885c") {
             answer(question.category, questionId = question.id(), answer = "NAIS")
         }
