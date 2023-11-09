@@ -71,9 +71,9 @@ class QuizApplication(private val teamName: String, database: Database? = null):
             }
 
             if (!flag)
-                return("ja")
+                return("true")
             else
-                return("nei")
+                return("false")
     }
 //[Question] category: arithmetic,
 // question: 99 * 63 (svaret må rundes til int),
