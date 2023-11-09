@@ -8,12 +8,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 internal class QuizApplicationTest {
-
-    @Test
-    fun name() {
-        TODO("Not yet implemented")
-    }
-
     @Test
     @Disabled
     fun `håndterer team-registration`() {
