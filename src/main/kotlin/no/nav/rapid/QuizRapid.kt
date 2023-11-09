@@ -20,9 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class QuizParticipant(private val teamName: String) {
     private val outBox = mutableListOf<Answer>()
 
-    open fun handle(question: Question) {
-        answer(answer = "FFC166", questionId = "db80fa0b-0d32-440d-bc5e-509bda617ed8", category = "team-registration")
-    }
+    open fun handle(question: Question) {}
     open fun handle(answer: Answer) {}
     open fun handle(assessment: Assessment) {}
 

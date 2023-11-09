@@ -33,8 +33,36 @@ class QuizApplication(private val teamName: String, database: Database? = null):
      */
 
     private fun handleRegisterTeam(question: Question) {
-        answer(answer = "FFC166", questionId = "db80fa0b-0d32-440d-bc5e-509bda617ed8", category = "team-registration")
-        //answer(question.category, questionId = question.id(), "DIN HEX")
+        val regnUt:Int = regnUt(question.question)
+        answer(question.category, questionId = question.id(), answer = regnUt.toString())
+    }
+//[Question] category: arithmetic,
+// question: 99 * 63 (svaret må rundes til int),
+// id: 70e8d7db-110e-43f1-9b47-4b992196c526
+
+    private fun regnUt(question: String): Int {
+        val a = Integer.parseInt(question.subSequence(0, 2).toString())
+        val b = Integer.parseInt(question.subSequence(5, 7).toString())
+
+        var svar:Int = 0;
+        val regnesymbol = question.subSequence(3, 4);
+
+        when (regnesymbol) {
+            "+" -> {
+                svar = a+b;
+            }
+            "-" -> {
+                svar = a-b;
+            }
+            "*" -> {
+                svar = a*b;
+            }
+            "/" -> {
+                svar = a/b;
+            }
+        }
+
+        return svar
     }
 
 }
