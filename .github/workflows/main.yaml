@@ -1,35 +1,60 @@
-name: Build, push, and deploy
 
-on: [push]
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
-  build:
-    name: Build and push Docker container
+  set_version:
+    name: set image name
     runs-on: ubuntu-latest
+    steps:
+      - name: create docker tag
+        run: echo "TAG=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+    outputs:
+      image: ghcr.io/${{ github.repository }}/lars-sara-leesah-quiz:${{ env.TAG }}
+
+
+  build:
     permissions:
       contents: read
-      id-token: write
-    outputs:
-      image: ${{ steps.docker-build-push.outputs.image }}
+      packages: write
+    name: build docker image
+    runs-on: ubuntu-latest
+    needs: set_version
     steps:
       - uses: actions/checkout@v3
-      - name: Push docker image to GAR
-        uses: nais/docker-build-push@v0
-        id: docker-build-push
+      - uses: actions/setup-java@v3
         with:
-          team: lars-sara-leesah-quiz # Replace
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }} # Provided as Organization Secret
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }} # Provided as Organization Variable
-
-  deploy:
-    name: Deploy to NAIS
-    needs: build
+          distribution: 'temurin'
+          java-version: '18'
+      - name: test and build
+        run: ./gradlew build
+      - name: build docker image
+        run: docker build . --pull -t ${{ needs.set_version.outputs.image }}
+      - name: push docker image
+        run: |
+          docker login --username "$GITHUB_REPOSITORY" -p ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          docker push ${{ needs.set_version.outputs.image }}
+  deployDev:
+    name: Deploy to dev
+    needs: [ set_version, build ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: leesah-quiz # Replace
+          CLUSTER: dev-gcp
           RESOURCE: nais.yaml
-          VAR: image=${{ needs.build.outputs.image }}
+          IMAGE: ${{ needs.set_version.outputs.image }}
