@@ -33,7 +33,7 @@ class QuizApplication(private val teamName: String, database: Database? = null):
      */
 
     private fun handleRegisterTeam(question: Question) {
-        //TODO("Her må du skrive kode ;)")
+        answer(answer = "FFC166", questionId = "db80fa0b-0d32-440d-bc5e-509bda617ed8", category = "team-registration")
         //answer(question.category, questionId = question.id(), "DIN HEX")
     }
 
