@@ -44,25 +44,16 @@ class QuizApplication(private val teamName: String, database: Database? = null):
         val a = Integer.parseInt(question.subSequence(0, 2).toString())
         val b = Integer.parseInt(question.subSequence(5, 7).toString())
 
-        var svar:Int = 0;
         val regnesymbol = question.subSequence(3, 4);
 
-        when (regnesymbol) {
-            "+" -> {
-                svar = a+b;
-            }
-            "-" -> {
-                svar = a-b;
-            }
-            "*" -> {
-                svar = a*b;
-            }
-            "/" -> {
-                svar = a/b;
-            }
+        return when (regnesymbol) {
+            "+" -> a+b
+            "-" -> a-b
+            "*" -> a*b
+            "/" -> a/b
+            else -> 0
         }
 
-        return svar
     }
 
 }
