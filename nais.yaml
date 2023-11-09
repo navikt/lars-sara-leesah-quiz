@@ -1,12 +1,24 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: lars-sara # CHANGE THIS! This will be the name of your application
+  name: lars-sara
   namespace: leesah-quiz
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "256M"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
   labels:
     team: leesah-quiz
 spec:
   image: {{image}}
+  port: 8080
+  strategy:
+    type: Recreate
+  liveness:
+    initialDelay: 30
+    path: isalive
+  readiness:
+    initialDelay: 30
+    path: isready
   replicas:
     max: 1
     min: 1
