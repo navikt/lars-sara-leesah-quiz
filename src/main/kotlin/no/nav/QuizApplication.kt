@@ -44,12 +44,15 @@ class QuizApplication(private val teamName: String, database: Database? = null):
         // [Question] category: nais-log,
         // question: [NAIS Oppgave] Quizmaster har logget en hemmelig nøkkel for deg i sine logger, klarer du å finne denne nøkkelen og sende den tilbake?,
         // id: 88e9f208-640a-4bfe-a781-fb577ed66c20
+        if (question.category == "nais-log") {
+            answer(question.category, questionId = question.id(), answer = "" )
+        }
 
         // [Question] category: transactions, question: INNSKUDD 3184, id: f4de5ce4-b06c-4b82-96af-f764abd727db
         // [Question] category: transactions, question: INNSKUDD 3414, id: 2df617d3-69cb-463e-ba45-1181c12c9a3e
-//        if (question.category == "transactions") {
-//            answer(question.category, questionId = question.id(), answer = "" )
-//        }
+        if (question.category == "transactions") {
+            answer(question.category, questionId = question.id(), answer = "" )
+        }
 
         //[Question] category: NAV, question: Hvor har vi kontor?, id: 01c57029-c155-45c1-8287-1efe68b069a0
         if (question.id() == "01c57029-c155-45c1-8287-1efe68b069a0") {
@@ -81,11 +84,7 @@ class QuizApplication(private val teamName: String, database: Database? = null):
             answer(question.category, questionId = question.id(), answer = "detsombetyrnoe.no")
         }
 
-
-
         // [Question] category: NAV, question: Hva heter NAV-direktøren?, id: eab7f69a-b02a-4e42-9219-b64261ce93ed
-
-
         if (question.id() == "eab7f69a-b02a-4e42-9219-b64261ce93ed") {
             answer(question.category, questionId = question.id(), answer = "Hans Christian Holte")
         }
@@ -121,8 +120,8 @@ class QuizApplication(private val teamName: String, database: Database? = null):
 
 
     private fun regnUt(question: String): Int {
-        val a = Integer.parseInt(question.subSequence(0, 2).toString())
-        val b = Integer.parseInt(question.subSequence(5, 7).toString())
+        val a = Integer.parseInt(question.subSequence(0, 2).toString().trim())
+        val b = Integer.parseInt(question.subSequence(5, 7).toString().trim())
 
         val regnesymbol = question.subSequence(3, 4);
 
